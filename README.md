@@ -3,13 +3,6 @@
 如果喜歡這個開源項目 歡迎STAR!
 
 介紹:
-<!DOCTYPE html>
-<html>
-<head>
-  <title>地區和國家顯示功能</title>
-  <style>
-    /* ... (樣式定義，包括報告內容的外觀) ... */
-  </style>
 </head>
 <body>
   <div class="report">
