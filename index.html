@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>地區和國家顯示</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }
+    h1 {
+      margin: 0;
+    }
+    #content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      border-radius: 8px;
+      opacity: 0.9;
+    }
+    button:hover {
+      background-color: #45a049;
+      opacity: 1;
+    }
+    .info-box {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .info-box:hover {
+      background-color: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+    }
+    .info-box h2 {
+      font-size: 24px;
+      margin-top: 0;
+    }
+    .info-box p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>地區和國家顯示</h1>
+  </header>
+  <div id="content">
+    <button onclick="getUserLocation()">獲取我的位置</button>
+    <div class="info-box" id="locationInfo"></div>
+    <div class="info-box" id="ipInfo"></div>
+  </div>
+  
+  <script>
+    /* ... (之前的 JavaScript 代碼保持不變) ... */
+          function getUserLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            
+            getLocationInfo(latitude, longitude);
+          },
+          error => {
+            console.error("Error getting user location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+      
+      fetch('https://api64.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const userIp = data.ip;
+          document.getElementById("ipInfo").innerHTML = `<p><strong>您的IP地址：</strong>${userIp}</p>`;
+        })
+        .catch(error => {
+          console.error("Error fetching IP address:", error);
+        });
+    }
+    
+    function getLocationInfo(latitude, longitude) {
+      const locationInfoDiv = document.getElementById("locationInfo");
+      
+      fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`)
+        .then(response => response.json())
+        .then(data => {
+          const region = data.principalSubdivision;
+          const country = data.countryName;
+          
+          locationInfoDiv.innerHTML = `<p><strong>地區：</strong>${region}</p><p><strong>國家：</strong>${country}</p>`;
+        })
+        .catch(error => {
+          console.error("Error fetching location information:", error);
+        });
+    }
+  </script>
+</body>
+</html>
